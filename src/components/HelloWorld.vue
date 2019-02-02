@@ -1,32 +1,22 @@
 <template>
   <div class="hello">
-    <h1>{{ msg }}</h1>
-    <p>
-      For a guide and recipes on how to configure / customize this project,<br>
-      check out the
-      <a href="https://cli.vuejs.org" target="_blank" rel="noopener">vue-cli documentation</a>.
-    </p>
-    <h3>Installed CLI Plugins</h3>
-    <ul>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-babel" target="_blank" rel="noopener">babel</a></li>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-eslint" target="_blank" rel="noopener">eslint</a></li>
-    </ul>
-    <h3>Essential Links</h3>
-    <ul>
-      <li><a href="https://vuejs.org" target="_blank" rel="noopener">Core Docs</a></li>
-      <li><a href="https://forum.vuejs.org" target="_blank" rel="noopener">Forum</a></li>
-      <li><a href="https://chat.vuejs.org" target="_blank" rel="noopener">Community Chat</a></li>
-      <li><a href="https://twitter.com/vuejs" target="_blank" rel="noopener">Twitter</a></li>
-      <li><a href="https://news.vuejs.org" target="_blank" rel="noopener">News</a></li>
-    </ul>
-    <h3>Ecosystem</h3>
-    <ul>
-      <li><a href="https://router.vuejs.org" target="_blank" rel="noopener">vue-router</a></li>
-      <li><a href="https://vuex.vuejs.org" target="_blank" rel="noopener">vuex</a></li>
-      <li><a href="https://github.com/vuejs/vue-devtools#vue-devtools" target="_blank" rel="noopener">vue-devtools</a></li>
-      <li><a href="https://vue-loader.vuejs.org" target="_blank" rel="noopener">vue-loader</a></li>
-      <li><a href="https://github.com/vuejs/awesome-vue" target="_blank" rel="noopener">awesome-vue</a></li>
-    </ul>
+    <h1 v-if="show">{{ msg }}</h1>
+    <h1 v-else>Judul Disembunyikan</h1>
+
+    <p>{{ nama }}</p>
+
+    <input type="text" v-model="nama">
+
+    <button type="button" v-on:click="hideTitle">Click Me</button><br><br><br>
+    <h2>{{ "Skor Anda "+poin }}</h2>
+
+    <div v-for="(item,index) in items" :key="item.pertanyaan" :option="item.pertanyaan">
+      <p>{{ item.pertanyaan }}</p>
+      <div v-for="pilih in item.pilihan" :key="pilih.pilihan" :option="pilih.pilihan">
+        <input type="radio" name="data['+index+']" v-on:click="checkJawaban(index,pilih.pilihan)" :value="pilih.pilihan" v-model="answer">{{ pilih.pilihan }}
+      </div><br><br>
+    </div>
+
   </div>
 </template>
 
@@ -35,6 +25,68 @@ export default {
   name: 'HelloWorld',
   props: {
     msg: String
+  },
+  data: function(){
+    return {
+      nama: 'Ghani',
+      poin: 0,
+      answer:String,
+      show: true,
+      items : [
+      {
+        name: 'soal1',
+        pertanyaan: '1. 4 + 5 =',
+        jawab: String,
+        check:false,
+        pilihan: [
+        { pilihan: '10' },
+        { pilihan: '12' },
+        { pilihan: '7'  },
+        { pilihan: '9'  }
+        ],
+        jawaban:'9'
+      },
+      {
+        name: 'soal2',
+        pertanyaan: '2. Sepak bola dimainkan berapa orang ?',
+        jawab: String,
+        pilihan:[
+        { pilihan: '8 orang'  },
+        { pilihan: '9 orang'  },
+        { pilihan: '11 orang' },
+        { pilihan: '10 orang' }
+        ],
+        jawaban:'11 orang'
+      },
+      {
+        name: 'soal3',
+        pertanyaan: '3. Ibu kota Indonesia adalah ?',
+        jawab: String,
+        pilihan: [
+        { pilihan: 'Bandung'  },
+        { pilihan: 'Jakarta'  },
+        { pilihan: 'Surabaya' },
+        { pilihan: 'Makassar' }
+        ],
+        jawaban: 'Jakarta'
+      }
+      ] 
+    }
+  },
+  methods: {
+    hideTitle () {
+      this.show = !this.show
+    
+  },
+
+  checkJawaban(i, answer){
+    if (this.items[i].jawaban === answer) {
+      this.poin++;
+    }
+  }
+},
+  mounted: function () {
+    this.nama = 'Suwita'
   }
 }
 </script>
